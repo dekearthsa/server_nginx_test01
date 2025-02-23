@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => {
+app.get('/api/data', (req, res) => {
     res.send('Hi from my mac server!');
 });
 

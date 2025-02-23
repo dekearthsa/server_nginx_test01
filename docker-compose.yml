@@ -5,10 +5,17 @@ services:
     container_name: my-nginx
     restart: always
     ports:
-      - "8080:80"
+      - "8443:443"
     volumes:
+      - ./mysig.crt:/etc/nginx/ssl/mysig.crt
+      - ./mysig.key:/etc/nginx/ssl/mysig.key
+      # - ./ca-bundle.crt:/etc/nginx/ssl/ca-bundle.crt; ## ถ้ามี CA อย่าลืม mount เข้าไปใน container ด้วย 
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-
+      - ./frontend/index.html:/usr/share/nginx/html/index.html:ro
+    depends_on:
+      - backend
+    networks:
+      - app-test-network
 
   backend:
     build:
@@ -17,3 +24,9 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    networks:
+      - app-test-network
+
+networks:
+  app-test-network:
+    driver: bridge
